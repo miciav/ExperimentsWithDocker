@@ -5,10 +5,10 @@
       "name": "psql",
       "group": "psql",
       "properties": {
-        "postgresql.driver.name": "org.postgresql.Driver",
         "postgresql.password": "",
-        "postgresql.url": "jdbc:postgresql://localhost:5432/",
+        "postgresql.driver.name": "org.postgresql.Driver",
         "postgresql.max.result": "1000",
+        "postgresql.url": "jdbc:postgresql://localhost:5432/",
         "postgresql.user": "gpadmin"
       },
       "status": "READY",
@@ -71,16 +71,16 @@
         "spark.app.name": "Zeppelin",
         "spark.cassandra.connection.host": "cassandra",
         "spark.executor.memory": "1g",
-        "zeppelin.spark.importImplicit": "true",
         "zeppelin.spark.sql.stacktrace": "false",
-        "zeppelin.spark.useHiveContext": "true",
+        "zeppelin.spark.importImplicit": "true",
         "zeppelin.interpreter.localRepo": "/usr/zeppelin/local-repo/2BX44T9KJ",
-        "zeppelin.spark.concurrentSQL": "false",
+        "zeppelin.spark.useHiveContext": "true",
         "args": "",
+        "zeppelin.spark.concurrentSQL": "false",
         "zeppelin.pyspark.python": "python",
         "zeppelin.dep.additionalRemoteRepository": "spark-packages,http://dl.bintray.com/spark-packages/maven,false;"
       },
-      "status": "DOWNLOADING_DEPENDENCIES",
+      "status": "READY",
       "interpreterGroup": [
         {
           "name": "spark",
@@ -129,8 +129,8 @@
       "properties": {
         "zeppelin.shell.keytab.location": "",
         "shell.command.timeout.millisecs": "60000",
-        "zeppelin.shell.principal": "",
         "zeppelin.interpreter.localRepo": "/usr/zeppelin/local-repo/2BWYTCJZC",
+        "zeppelin.shell.principal": "",
         "zeppelin.shell.auth.type": ""
       },
       "status": "READY",
@@ -179,8 +179,8 @@
       "name": "elasticsearch",
       "group": "elasticsearch",
       "properties": {
-        "elasticsearch.result.size": "10",
         "elasticsearch.port": "9300",
+        "elasticsearch.result.size": "10",
         "elasticsearch.cluster.name": "elasticsearch",
         "elasticsearch.host": "localhost"
       },
@@ -271,11 +271,11 @@
         "default.password": "",
         "zeppelin.interpreter.localRepo": "/usr/zeppelin/local-repo/2BUVCFMWC",
         "zeppelin.jdbc.auth.type": "",
-        "zeppelin.jdbc.concurrent.use": "true",
         "hive.password": "",
+        "zeppelin.jdbc.concurrent.use": "true",
         "hive.driver": "org.apache.hive.jdbc.HiveDriver",
-        "zeppelin.jdbc.keytab.location": "",
         "common.max_count": "1000",
+        "zeppelin.jdbc.keytab.location": "",
         "phoenix.password": "",
         "zeppelin.jdbc.principal": "",
         "zeppelin.jdbc.concurrent.max_connection": "10",
@@ -312,6 +312,39 @@
       "2BX6TPWNA"
     ],
     "2BW2GD6NP": [
+      "2BX44T9KJ",
+      "2BVS7W5AE",
+      "2BUQNY71C",
+      "2BWYTCJZC",
+      "2BW92AJ26",
+      "2BV15NK82",
+      "2BUE7YEUC",
+      "2BUVCFMWC",
+      "2BX6TPWNA"
+    ],
+    "2BVH2Y24H": [
+      "2BX44T9KJ",
+      "2BVS7W5AE",
+      "2BUQNY71C",
+      "2BWYTCJZC",
+      "2BW92AJ26",
+      "2BV15NK82",
+      "2BUE7YEUC",
+      "2BUVCFMWC",
+      "2BX6TPWNA"
+    ],
+    "2BX6GRGTW": [
+      "2BX44T9KJ",
+      "2BVS7W5AE",
+      "2BUQNY71C",
+      "2BWYTCJZC",
+      "2BW92AJ26",
+      "2BV15NK82",
+      "2BUE7YEUC",
+      "2BUVCFMWC",
+      "2BX6TPWNA"
+    ],
+    "2BTM9KGNX": [
       "2BX44T9KJ",
       "2BVS7W5AE",
       "2BUQNY71C",
