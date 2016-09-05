@@ -18,15 +18,30 @@ services:
     ports:
       - "9092:9092"
     environment:
-      KAFKA_ADVERTISED_HOST_NAME: HOSTIP
+#      KAFKA_ADVERTISED_HOST_NAME: HOSTIP
 #      KAFKA_CREATE_TOPICS: "topic:1:1"
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+#      KAFKA_ADVERTISED_HOST_NAME: kafka
+      KAFKA_ADVERTISED_PORT: 9092
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - prodnetwork
     depends_on:
       - zookeeper
+  producer:
+    container_name: producer
+    image: miciav/producer
+    environment:
+       KAFKA_ADDRESS: kafka:9092
+       ZK_ADDRESS: zookeeper:2181
+    depends_on:
+      - kafka
+      - zookeeper
+    networks:
+      - prodnetwork
+    links:
+      - kafka
   producer:
     container_name: producer
     image: miciav/producer
@@ -114,9 +129,9 @@ services:
       - "8080:8080"
     volumes:
       - ./zeppelin/about.json:/usr/zeppelin/notebook/about.json
-#      - ./zeppelin/data:/usr/zeppelin/data
+      - ./zeppelin/data:/usr/zeppelin/data
       - ./zeppelin/notebooks:/usr/zeppelin/notebook
-#      - ./zeppelin/conf:/usr/zeppelin/conf
+      - ./zeppelin/conf:/usr/zeppelin/conf
     networks:      
       - prodnetwork
   cassandra:
