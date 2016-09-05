@@ -11,3 +11,4 @@
 - For a more complete experience I will consider to use Apache Ambari
 - Use Structured Streaming (see https://www.youtube.com/watch?v=_1byVWTEK1s)
 - Looking for a job scheduler - Azkaban seems interesting - Pinterest pinball as well as drake
+- https://github.com/linkedin/Burrow/blob/master/docker-compose.yml (useful example for kafka)
