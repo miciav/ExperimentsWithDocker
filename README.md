@@ -1,6 +1,7 @@
 # ExperimentsWithDocker
 ## TODO list
 - https://www.big-data-europe.eu/scalable-sparkhdfs-workbench-using-docker/
+- https://github.com/big-data-europe/ansible
 - Add HUE
 - Add Oozie
 - Save data in HDFS using parquet
