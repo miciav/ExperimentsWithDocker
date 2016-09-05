@@ -1,4 +1,7 @@
+
 # ExperimentsWithDocker
+## Chagelog
+- 05/09/2016 kafka in anonimous way, that is it can be deployed in a swarm without knowing in advance the host ip.
 ## TODO list
 - https://www.big-data-europe.eu/scalable-sparkhdfs-workbench-using-docker/
 - https://github.com/big-data-europe/ansible
@@ -11,4 +14,4 @@
 - For a more complete experience I will consider to use Apache Ambari
 - Use Structured Streaming (see https://www.youtube.com/watch?v=_1byVWTEK1s)
 - Looking for a job scheduler - Azkaban seems interesting - Pinterest pinball as well as drake
-- https://github.com/linkedin/Burrow/blob/master/docker-compose.yml (useful example for kafka)
+- Burrow: https://github.com/linkedin/Burrow/blob/master/docker-compose.yml (useful example for kafka)
