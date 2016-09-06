@@ -2,6 +2,6 @@ CREATE KEYSPACE IF NOT EXISTS mio WITH REPLICATION = { 'class' : 'SimpleStrategy
 DESC KEYSPACE mio;
 use mio;
 CREATE TABLE IF NOT EXISTS results (prod text, average float, timestamp timestamp, PRIMARY KEY (prod) );
-CREATE TABLE IF NOT EXISTS all_results (prod text, value bigint, timestamp timestamp, id uuid, PRIMARY KEY (id) );
+CREATE TABLE IF NOT EXISTS all_results (prod text, value bigint, timestamp timestamp, id text, PRIMARY KEY (id) );
 
 
