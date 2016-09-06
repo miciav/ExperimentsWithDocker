@@ -1,7 +1,0 @@
-Filter.db
-TOC.txt
-Data.db
-Statistics.db
-Summary.db
-Index.db
-CompressionInfo.db

@@ -1,0 +1,85 @@
+version: '2'
+
+networks:
+  prodnetwork:
+    driver: bridge
+
+services:
+  zookeeper:
+    image: wurstmeister/zookeeper
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    networks:
+      - prodnetwork
+  kafka:
+    image: wurstmeister/kafka
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    environment:
+#      KAFKA_ADVERTISED_HOST_NAME: HOSTIP
+#      KAFKA_CREATE_TOPICS: "topic:1:1"
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+#      KAFKA_ADVERTISED_HOST_NAME: kafka
+      KAFKA_ADVERTISED_PORT: 9092
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - prodnetwork
+    depends_on:
+      - zookeeper
+  producer:
+    container_name: producer
+    image: miciav/producer
+    environment:
+       KAFKA_ADDRESS: kafka:9092
+       ZK_ADDRESS: zookeeper:2181
+    depends_on:
+      - kafka
+      - zookeeper
+    networks:
+      - prodnetwork
+    links:
+      - kafka
+    restart: on-failure:10
+  zeppelin:
+    container_name: zeppelin
+    image: dylanmei/zeppelin
+    environment:
+      ZEPPELIN_PORT: 8000
+      ZEPPELIN_JAVA_OPTS: >-
+        -Dspark.driver.memory=1g
+        -Dspark.executor.memory=1g
+      MASTER: local[*]
+      KAFKA_ADDRESS: kafka:9092
+    depends_on:
+      - kafka
+      - zookeeper
+      - cassandra
+    links:
+      - cassandra
+      - kafka
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./zeppelin/about.json:/usr/zeppelin/notebook/about.json
+      - ./zeppelin/data:/usr/zeppelin/data
+      - ./zeppelin/notebooks:/usr/zeppelin/notebook
+      - ./zeppelin/conf:/usr/zeppelin/conf
+    networks:      
+      - prodnetwork
+  cassandra:
+    container_name: cassandra
+    image: spotify/cassandra
+    ports:
+      - "7001:7001"
+      - "7199:7199"
+      - "9160:9160"
+      - "7000:7000"
+      - "9042:9042"
+    volumes:
+      - ./cassandra:/var/lib/cassandra
+    networks:      
+      - prodnetwork
+
