@@ -126,7 +126,7 @@ services:
       - cassandra
       - master
     ports:
-      - "8080:8080"
+      - "9100:8080"
     volumes:
       - ./zeppelin/about.json:/usr/zeppelin/notebook/about.json
       - ./zeppelin/data:/usr/zeppelin/data
