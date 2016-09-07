@@ -1,0 +1,196 @@
+{
+  "Services": {
+    "cassandra": {
+      "Image": "spotify/cassandra@sha256:8bf8303c57f2a1f1a6c2faa880e9d2f9a1843777097e53847e8725d92e400503",
+      "Networks": [
+        "prodnetwork"
+      ],
+      "Ports": [
+        {
+          "Port": 7001,
+          "Protocol": "tcp"
+        },
+        {
+          "Port": 7199,
+          "Protocol": "tcp"
+        },
+        {
+          "Port": 9160,
+          "Protocol": "tcp"
+        },
+        {
+          "Port": 7000,
+          "Protocol": "tcp"
+        },
+        {
+          "Port": 9042,
+          "Protocol": "tcp"
+        }
+      ]
+    },
+    "kafka": {
+      "Env": [
+        "KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181",
+        "KAFKA_ADVERTISED_PORT=9092"
+      ],
+      "Image": "wurstmeister/kafka@sha256:a21699046d2efc6136c85cd5cb38e51754bf13429cd2aa93a8b8e1159196dfb4",
+      "Networks": [
+        "prodnetwork"
+      ],
+      "Ports": [
+        {
+          "Port": 9092,
+          "Protocol": "tcp"
+        }
+      ]
+    },
+    "master": {
+      "Args": [
+        "bin/spark-class",
+        "org.apache.spark.deploy.master.Master",
+        "-h",
+        "master"
+      ],
+      "Env": [
+        "SPARK_PUBLIC_DNS=localhost",
+        "MASTER=spark://master:7077",
+        "SPARK_CONF_DIR=/conf"
+      ],
+      "Image": "gettyimages/spark@sha256:852592e38662907e6db5acceb8cc7a0bfd997d72b9a3b74871f6906d4153c5a7",
+      "Networks": [
+        "prodnetwork"
+      ],
+      "Ports": [
+        {
+          "Port": 4040,
+          "Protocol": "tcp"
+        },
+        {
+          "Port": 6066,
+          "Protocol": "tcp"
+        },
+        {
+          "Port": 7077,
+          "Protocol": "tcp"
+        },
+        {
+          "Port": 8080,
+          "Protocol": "tcp"
+        },
+        {
+          "Port": 7001,
+          "Protocol": "tcp"
+        },
+        {
+          "Port": 7002,
+          "Protocol": "tcp"
+        },
+        {
+          "Port": 7003,
+          "Protocol": "tcp"
+        },
+        {
+          "Port": 7004,
+          "Protocol": "tcp"
+        },
+        {
+          "Port": 7005,
+          "Protocol": "tcp"
+        },
+        {
+          "Port": 7006,
+          "Protocol": "tcp"
+        }
+      ]
+    },
+    "producer": {
+      "Env": [
+        "ZK_ADDRESS=zookeeper:2181",
+        "KAFKA_ADDRESS=kafka:9092"
+      ],
+      "Image": "miciav/producer@sha256:ea5ad64094d7aefc8873c0959dfd8b015b53e7a1d79777964c405211e5f8707a",
+      "Networks": [
+        "prodnetwork"
+      ]
+    },
+    "worker": {
+      "Args": [
+        "bin/spark-class",
+        "org.apache.spark.deploy.worker.Worker",
+        "spark://master:7077"
+      ],
+      "Env": [
+        "SPARK_WORKER_CORES=2",
+        "SPARK_CONF_DIR=/conf",
+        "SPARK_WORKER_WEBUI_PORT=8081",
+        "SPARK_PUBLIC_DNS=localhost",
+        "SPARK_WORKER_MEMORY=1g",
+        "SPARK_WORKER_PORT=8881"
+      ],
+      "Image": "gettyimages/spark@sha256:852592e38662907e6db5acceb8cc7a0bfd997d72b9a3b74871f6906d4153c5a7",
+      "Networks": [
+        "prodnetwork"
+      ],
+      "Ports": [
+        {
+          "Port": 8081,
+          "Protocol": "tcp"
+        },
+        {
+          "Port": 7012,
+          "Protocol": "tcp"
+        },
+        {
+          "Port": 7013,
+          "Protocol": "tcp"
+        },
+        {
+          "Port": 7014,
+          "Protocol": "tcp"
+        },
+        {
+          "Port": 7015,
+          "Protocol": "tcp"
+        },
+        {
+          "Port": 7016,
+          "Protocol": "tcp"
+        },
+        {
+          "Port": 8881,
+          "Protocol": "tcp"
+        }
+      ]
+    },
+    "zeppelin": {
+      "Env": [
+        "MASTER=spark://master:7077",
+        "KAFKA_ADDRESS=kafka:9092",
+        "ZEPPELIN_PORT=8080"
+      ],
+      "Image": "dylanmei/zeppelin@sha256:192b2f8e756ef11c7cab30171dce7655b378ba36a26b9c563e54ca0eaca52321",
+      "Networks": [
+        "prodnetwork"
+      ],
+      "Ports": [
+        {
+          "Port": 8080,
+          "Protocol": "tcp"
+        }
+      ]
+    },
+    "zookeeper": {
+      "Image": "wurstmeister/zookeeper@sha256:5c04a0363196916b51cde29a55f40edcf300334706fd17192126251b9d838cdd",
+      "Networks": [
+        "prodnetwork"
+      ],
+      "Ports": [
+        {
+          "Port": 2181,
+          "Protocol": "tcp"
+        }
+      ]
+    }
+  },
+  "Version": "0.1"
+}
