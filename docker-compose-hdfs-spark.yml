@@ -1,0 +1,190 @@
+version: '2' 
+
+networks:
+  hadoop:
+    driver: bridge
+
+services:
+  zookeeper:
+    image: wurstmeister/zookeeper
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    networks:
+      - hadoop
+  kafka:
+    image: wurstmeister/kafka
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_PORT: 9092
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - hadoop
+    depends_on:
+      - zookeeper
+  producer:
+    container_name: producer
+    image: miciav/producer
+    environment:
+       KAFKA_ADDRESS: kafka:9092
+       ZK_ADDRESS: zookeeper:2181
+    depends_on:
+      - kafka
+      - zookeeper
+    networks:
+      - hadoop
+    links:
+      - kafka
+    restart: on-failure:10
+  namenode:
+    image: bde2020/hadoop-namenode:1.1.0-hadoop2.7.1
+    hostname: namenode
+    container_name: namenode
+    networks:
+      - hadoop
+    volumes:
+      - ./data/namenode:/hadoop/dfs/name
+    environment:
+      - CLUSTER_NAME=test
+    env_file:
+      - ./hadoop.env
+    ports:
+      - "50070:50070"
+      - "8020:8020"
+
+
+  historyserver:
+    image: bde2020/hadoop-historyserver:1.1.0-hadoop2.7.1
+    hostname: historyserver
+    container_name: historyserver
+    networks: 
+      - hadoop
+    volumes:
+      - ./data/historyserver:/hadoop/yarn/timeline
+    env_file:
+      - ./hadoop.env
+
+  datanode1:
+    image: bde2020/hadoop-datanode:1.1.0-hadoop2.7.1
+    hostname: datanode1
+    container_name: datanode1
+    depends_on:
+      - namenode
+    networks:
+      - hadoop
+    volumes:
+      - ./data/datanode1:/hadoop/dfs/data
+    env_file:
+      - ./hadoop.env
+
+  datanode2:
+    image: bde2020/hadoop-datanode:1.1.0-hadoop2.7.1
+    hostname: datanode2
+    container_name: datanode2
+    depends_on:
+      - namenode
+    networks: 
+      - hadoop
+    volumes:
+      - ./data/datanode2:/hadoop/dfs/data
+    env_file:
+      - ./hadoop.env
+
+  spark-master:
+    image: miciav/hadoop-spark-master
+    hostname: spark-master
+    container_name: spark-master
+    networks:
+      - hadoop
+    environment:
+      - CORE_CONF_fs_defaultFS=hdfs://namenode:8020
+      - YARN_CONF_yarn_resourcemanager_hostname=resourcemanager
+      - SPARK_CONF_spark_eventLog_enabled=true
+      - SPARK_CONF_spark_eventLog_dir=hdfs://namenode:8020/spark-logs
+      - SPARK_CONF_spark_history_fs_logDirectory=hdfs://namenode:8020/spark-logs
+    env_file:
+      - ./hadoop.env
+    ports:
+        - "8080:8080"
+        - "4040:4040"
+
+  spark-worker:
+    image: miciav/hadoop-spark-worker
+    hostname: spark-worker
+    networks: 
+      - hadoop
+    environment:
+      - CORE_CONF_fs_defaultFS=hdfs://namenode:8020
+      - YARN_CONF_yarn_resourcemanager_hostname=resourcemanager
+      - SPARK_CONF_spark_eventLog_enabled=true
+      - SPARK_CONF_spark_eventLog_dir=hdfs://namenode:8020/spark-logs
+      - SPARK_CONF_spark_history_fs_logDirectory=hdfs://namenode:8020/spark-logs
+      - SPARK_MASTER_URL=spark://spark-master:7077
+    env_file:
+      - ./hadoop.env
+    links:
+     - cassandra
+
+  zeppelin:
+    container_name: zeppelin
+    image: miciav/hadoop-spark-zeppelin
+    environment:
+      ZEPPELIN_PORT: 8090
+      MASTER: spark://spark-master:7077
+        - CORE_CONF_fs_defaultFS=hdfs://namenode:8020
+        - YARN_CONF_yarn_resourcemanager_hostname=resourcemanager
+        - SPARK_CONF_spark_eventLog_enabled=true
+        - SPARK_CONF_spark_eventLog_dir=hdfs://namenode:8020/spark-logs
+        - SPARK_CONF_spark_history_fs_logDirectory=hdfs://namenode:8020/spark-logs
+        - ZEPPELIN_JAVA_OPTS="-Dhdp.version=2.7.1"
+      KAFKA_ADDRESS: kafka:9092
+    depends_on:
+      - kafka
+      - zookeeper
+      - cassandra
+    links:
+      - cassandra
+      - spark-master
+    depends_on:
+      - namenode
+    ports:
+      - "9100:8090"
+      - "8180:8080"
+    volumes:
+      - ./zeppelin/about.json:/usr/zeppelin/notebook/about.json
+      - ./zeppelin/notebooks:/usr/zeppelin/notebook
+      - ./zeppelin/conf:/usr/zeppelin/conf
+    networks:      
+      - hadoop
+    env_file:
+      - ./hadoop.env
+
+
+  hue:
+    image: bde2020/hdfs-filebrowser:3.9
+    hostname: hdfsfb
+    container_name: hdfsfb
+    networks:
+      - hadoop
+    environment:
+      - NAMENODE_HOST=namenode
+    ports:
+      - "8088:8088"
+  cassandra:
+    container_name: cassandra
+    image: spotify/cassandra
+    ports:
+      - "7001:7001"
+      - "7199:7199"
+      - "9160:9160"
+      - "7000:7000"
+      - "9042:9042"
+    volumes:
+      - ./cassandra:/var/lib/cassandra
+    networks:      
+      - hadoop
+
