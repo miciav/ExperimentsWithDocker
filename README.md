@@ -10,9 +10,11 @@
 --``` tar -xzvf spark.tgz ```
 --``` tar -xzvf cassandra.tgz ```
 --``` tar -xzvf data.tgz ```
+
 ## Platform deployment and management
 - Run the platform using docker-compose ```docker-compose up -d ```. This command will deploy the plaftform described in ```docker-compose.yml```. Other ```yml``` files are for reasearch purpose only and describe a more coplex plaftform
 - To stop the platform type ```docker-compose down``` in the directory where ```docker-compose.yml``` is located 
+
 ## Utility script
 - ```run_plaftform.sh```: 
 -- removes existing data directory
