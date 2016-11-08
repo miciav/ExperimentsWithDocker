@@ -6,10 +6,10 @@
 - Make sure you have at least 10Gb of RAM available on the machine that is going to run the platform
 - Clone the project:  ```git clone  https://github.com/miciav/ExperimentsWithDocker.git```
 - untar data files: 
-  -```tar -xzvf zeppelin.tgz ```
-  -``` tar -xzvf spark.tgz ```
-  -``` tar -xzvf cassandra.tgz ```
-  -``` tar -xzvf data.tgz ```
+  - ```tar -xzvf zeppelin.tgz ```
+  - ``` tar -xzvf spark.tgz ```
+  - ``` tar -xzvf cassandra.tgz ```
+  - ``` tar -xzvf data.tgz ```
 
 ## Platform deployment and management
 - Run the platform using docker-compose ```docker-compose up -d ```. This command will deploy the plaftform described in ```docker-compose.yml```. Other ```yml``` files are for reasearch purpose only and describe a more coplex plaftform
