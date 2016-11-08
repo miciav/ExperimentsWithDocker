@@ -19,7 +19,6 @@
 - ```run_plaftform.sh```: 
   - removes existing data directory
   - untars data files
-
   - deploys and runs the platform
 - ```destroy_platform.sh```
   - shuts down the platform
