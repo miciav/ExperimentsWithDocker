@@ -33,7 +33,9 @@
 
 ## Chagelog
 - 05/09/2016 kafka in anonimous way, that is it can be deployed in a swarm without knowing in advance the host ip.
+
 ## TODO list
+- consider to add StreamSet Datacollettor to simplify data ingestion
 - https://www.big-data-europe.eu/scalable-sparkhdfs-workbench-using-docker/
 - https://github.com/big-data-europe/ansible
 - Add HUE: maybe not possible due to the lack of HDFS : added Spark-notebook in a separate version of docker-compose file
